@@ -158,3 +158,28 @@ if __name__ == '__main__':
     main_window = MainWindow() # this creates a notebook / main window called main_window. You may change the name if you want
 
     main_window.mainloop()
+
+
+# Print Notes
+# This section of code is used to print the contents of the saved note files.
+
+import os
+
+# Specify the directory where the note files are saved
+notes_directory = r"C:/Users/ahmed/Downloads"
+
+# Get a list of all text files in the specified directory
+note_files = [file for file in os.listdir(notes_directory) if file.endswith(".txt")]
+
+# Iterate over each note file and print its contents
+for i, note_file in enumerate(note_files, start=1):
+    file_path = os.path.join(notes_directory, note_file)
+    with open(file_path, "r") as file:
+        note_content = file.read()
+        title, text, meta = note_content.split("\n", 2)
+        
+        print(f"Note {i}:")
+        print(f"Title: {title}")
+        print(f"Text: {text}")
+        print(f"Metadata: {meta}")
+        print()
