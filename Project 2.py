@@ -48,7 +48,7 @@ class MainWindow(tk.Tk):
         filetypes=[("text files", "*.txt"), ("all files", "*.*")])
        
 
-    
+    #Testing Guidinetti
 
 # the NoteForm() class creates a Toplevel window that is a note form containing fields for
 # data entry for title, text, link, and tags. It also calculates a meta field with date, time, and timezone
