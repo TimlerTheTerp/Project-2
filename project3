@@ -81,28 +81,28 @@ class NoteForm(tk.Toplevel):
         text_label = tk.Label(self, bg='#f2f2f2', text='Note Text:', font=('Arial', 12), fg='red')
         text_label.grid(padx=10, pady=10, row=2, column=0, sticky='e')
 
-        self.note_title = tk.Entry(self, width=80)
+        self.note_title = tk.Entry(self, width=60)
         self.note_title.grid(padx=10, pady=10, row=1, column=1, sticky='w')
         self.note_title.insert(0, 'New note title')
 
-        self.notebook = tk.Text(self, height=10, width=60)
-        self.notebook.grid(padx=10, pady=10, row=2, column=1)
+        self.notebook = tk.Text(self, height=10, width=40)
+        self.notebook.grid(padx=10, pady=10, row=2, column=1, sticky='w')
         self.notebook.insert('1.0', actualnote)
 
         # Snippet Fields
         snippet_title_label = tk.Label(self, bg='#f2f2f2', text='Snippet Title:', font=('Arial', 12), fg='red')
         snippet_title_label.grid(padx=10, pady=10, row=3, column=0, sticky='e')
-        self.snippet_title = tk.Entry(self, width=80)
+        self.snippet_title = tk.Entry(self, width=60)
         self.snippet_title.grid(padx=10, pady=10, row=3, column=1, sticky='w')
 
         snippet_code_label = tk.Label(self, bg='#f2f2f2', text='Snippet Code:', font=('Arial', 12), fg='red')
         snippet_code_label.grid(padx=10, pady=10, row=4, column=0, sticky='e')
-        self.snippet_code = tk.Text(self, height=10, width=60)
-        self.snippet_code.grid(padx=10, pady=10, row=4, column=1)
+        self.snippet_code = tk.Text(self, height=10, width=40)
+        self.snippet_code.grid(padx=10, pady=10, row=4, column=1, sticky='w')
 
         # Submit Note Button
         self.submit_button = tk.Button(self, text="Submit Note", command=self.submit, font=('Arial', 12, 'bold'), bg='orange', fg='white')
-        self.submit_button.grid(padx=10, pady=10, row=6, column=0, sticky='w')
+        self.submit_button.grid(row=6, column=1, pady=10)
 
     def metadata(self):
         now = datetime.datetime.now()
