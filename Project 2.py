@@ -212,23 +212,26 @@ class MainWindow(tk.Tk):
     def __init__(self):
         super().__init__()
         
-        self.geometry("600x400")
+        self.geometry("600x500")  # Increased window height
         self.title('Notebook')
+        self.configure(bg='#98FB98')  # Light green background color
         self.notebook = []
         self.notes = []
         self.snippets = []
         
+        button_style = {'bg': 'purple', 'fg': 'white', 'font': ('Arial', 12, 'bold')}
+        
         # New Note Button
-        self.new_button = tk.Button(self, text="New Note", command=self.new_note, bg='orange', fg='white')
-        self.new_button.place(x=100, y=350)  
+        self.new_button = tk.Button(self, text="New Note", command=self.new_note, **button_style)
+        self.new_button.pack(pady=30)  # Increased vertical padding
 
         # Open Notebook Button
-        self.open_button = tk.Button(self, text="Open Notebook", command=self.open_notebook, bg='orange', fg='white')
-        self.open_button.place(x=265, y=350) 
+        self.open_button = tk.Button(self, text="Open Notebook", command=self.open_notebook, **button_style)
+        self.open_button.pack(pady=30)  # Increased vertical padding
 
         # Save Notebook Button
-        self.save_button = tk.Button(self, text="Save Notebook", command=self.save_notebook, bg='orange', fg='white')
-        self.save_button.place(x=450, y=350) 
+        self.save_button = tk.Button(self, text="Save Notebook", command=self.save_notebook, **button_style)
+        self.save_button.pack(pady=30)  # Increased vertical padding
              
     def new_note(self):
         note_window = NoteForm(self, self.notebook, self.notes, self.snippets)
@@ -242,22 +245,30 @@ class MainWindow(tk.Tk):
             with open(filepath, 'r') as file:
                 lines = file.readlines()
                 
-                if len(lines) >= 7:
-                    title = lines[0].strip()
-                    text = lines[1].strip()
-                    meta = lines[2].strip()
-                    snippet_title = lines[3].strip()
-                    snippet_code = lines[4].strip()
-                    
-                    note_dict = {'title': title, 'text': text, 'meta': meta}
-                    self.notes = [note_dict]
-                    
-                    snippet = Snippet(snippet_title, snippet_code)
-                    self.snippets = [snippet]
+                self.notes = []
+                self.snippets = []
                 
+                i = 0
+                while i < len(lines):
+                    if i + 4 < len(lines):
+                        title = lines[i].strip()
+                        text = lines[i+1].strip()
+                        meta = lines[i+2].strip()
+                        snippet_title = lines[i+3].strip()
+                        snippet_code = lines[i+4].strip()
+                        
+                        note_dict = {'title': title, 'text': text, 'meta': meta}
+                        self.notes.append(note_dict)
+                        
+                        snippet = Snippet(snippet_title, snippet_code)
+                        self.snippets.append(snippet)
+                        
+                        i += 5
+                    else:
+                        break
+            
             note_window = NoteForm(self, self.notebook, self.notes, self.snippets)
             note_window.load_note()
-
 
     def save_notebook(self):
         filepath = filedialog.asksaveasfilename(initialdir=os.path.normpath(r"C:\Users\timle\OneDrive\Documents\PythonNotebook").encode('utf-8'),
@@ -272,39 +283,39 @@ class NoteForm(tk.Toplevel):
         self.snippets = snippets
 
         self.geometry("600x500")
-        self.configure(bg='#f2f2f2')
+        self.configure(bg='#98FB98')  # Light green background color
 
         actualnote = 'Please write something in python noteswise that is useful for your understanding'
 
         # Note title
-        title_label = tk.Label(self, bg='#f2f2f2', text='Note Title:', font=('Arial', 12), fg='red')
+        title_label = tk.Label(self, bg='#98FB98', text='Note Title:', font=('Courier', 12, 'bold'), fg='black')
         title_label.grid(padx=10, pady=10, row=1, column=0, sticky='e')
 
         # Note text
-        text_label = tk.Label(self, bg='#f2f2f2', text='Note Text:', font=('Arial', 12), fg='red')
+        text_label = tk.Label(self, bg='#98FB98', text='Note Text:', font=('Courier', 12, 'bold'), fg='black')
         text_label.grid(padx=10, pady=10, row=2, column=0, sticky='e')
 
-        self.note_title = tk.Entry(self, width=60)
+        self.note_title = tk.Entry(self, width=60, font=('Courier', 12))
         self.note_title.grid(padx=10, pady=10, row=1, column=1, sticky='w')
         self.note_title.insert(0, 'New note title')
 
-        self.notebook = tk.Text(self, height=10, width=40)
+        self.notebook = tk.Text(self, height=10, width=40, font=('Courier', 12))
         self.notebook.grid(padx=10, pady=10, row=2, column=1, sticky='w')
         self.notebook.insert('1.0', actualnote)
 
         # Snippet Fields
-        snippet_title_label = tk.Label(self, bg='#f2f2f2', text='Snippet Title:', font=('Arial', 12), fg='red')
+        snippet_title_label = tk.Label(self, bg='#98FB98', text='Snippet Title:', font=('Courier', 12, 'bold'), fg='black')
         snippet_title_label.grid(padx=10, pady=10, row=3, column=0, sticky='e')
-        self.snippet_title = tk.Entry(self, width=60)
+        self.snippet_title = tk.Entry(self, width=60, font=('Courier', 12))
         self.snippet_title.grid(padx=10, pady=10, row=3, column=1, sticky='w')
 
-        snippet_code_label = tk.Label(self, bg='#f2f2f2', text='Snippet Code:', font=('Arial', 12), fg='red')
+        snippet_code_label = tk.Label(self, bg='#98FB98', text='Snippet Code:', font=('Courier', 12, 'bold'), fg='black')
         snippet_code_label.grid(padx=10, pady=10, row=4, column=0, sticky='e')
-        self.snippet_code = tk.Text(self, height=10, width=40)
+        self.snippet_code = tk.Text(self, height=10, width=40, font=('Courier', 12))
         self.snippet_code.grid(padx=10, pady=10, row=4, column=1, sticky='w')
 
         # Submit Note Button
-        self.submit_button = tk.Button(self, text="Submit Note", command=self.submit, font=('Arial', 12, 'bold'), bg='orange', fg='white')
+        self.submit_button = tk.Button(self, text="Submit Note", command=self.submit, font=('Courier', 12, 'bold'), bg='purple', fg='white')
         self.submit_button.grid(row=6, column=1, pady=10)
 
     def metadata(self):
