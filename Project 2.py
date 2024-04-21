@@ -10,6 +10,23 @@ import datetime # one module for working with dates and times
 # These methods correspond to new, open, and save buttons in the window.
 # The new_note method calls the NoteForm class to create a new note form top level window.
 
+#This class helps edit notes
+class EditHistory:
+    def __init__(self):
+        self.edits = []
+
+    def add_edit(self, timestamp, user=None, note_data=None):
+        """Adds a new edit entry to the history."""
+        self.edits.append({
+            "timestamp": timestamp,
+            "user": user,  # Optional for user tracking
+            "note_data": note_data  # Optional for detailed changes captured (future extension)
+        })
+
+    def get_history(self):
+        """Returns the complete edit history."""
+        return self.edits
+    
 class MainWindow(tk.Tk):
     def __init__(self):  #initialize the main window
         super().__init__() # initialize it as a tkinter window
@@ -48,7 +65,7 @@ class MainWindow(tk.Tk):
         filetypes=[("text files", "*.txt"), ("all files", "*.*")])
        
 
-    #Testing Guidinetti
+    
 
 # the NoteForm() class creates a Toplevel window that is a note form containing fields for
 # data entry for title, text, link, and tags. It also calculates a meta field with date, time, and timezone
@@ -158,7 +175,6 @@ if __name__ == '__main__':
     main_window = MainWindow() # this creates a notebook / main window called main_window. You may change the name if you want
 
     main_window.mainloop()
-
 
 # Print Notes
 # This section of code is used to print the contents of the saved note files.
