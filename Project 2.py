@@ -9,7 +9,7 @@ class MainWindow(tk.Tk):
     def __init__(self):
         super().__init__()
         
-        self.geometry("600x500")  # Increased window height
+        self.geometry("800x500")  # Increased window width
         self.title('Notebook')
         self.configure(bg='#98FB98')  # Light green background color
         self.notebook = []
@@ -79,7 +79,7 @@ class NoteForm(tk.Toplevel):
         self.notes = notes
         self.snippets = snippets
 
-        self.geometry("600x500")
+        self.geometry("800x600")  # Increased window size
         self.configure(bg='#98FB98')  # Light green background color
 
         actualnote = 'Please write something in python noteswise that is useful for your understanding'
@@ -92,23 +92,23 @@ class NoteForm(tk.Toplevel):
         text_label = tk.Label(self, bg='#98FB98', text='Note Text:', font=('Courier', 12, 'bold'), fg='black')
         text_label.grid(padx=10, pady=10, row=2, column=0, sticky='e')
 
-        self.note_title = tk.Entry(self, width=60, font=('Courier', 12))
+        self.note_title = tk.Entry(self, width=40, font=('Courier', 12))  # Reduced width
         self.note_title.grid(padx=10, pady=10, row=1, column=1, sticky='w')
         self.note_title.insert(0, 'New note title')
 
-        self.notebook = tk.Text(self, height=10, width=40, font=('Courier', 12))
+        self.notebook = tk.Text(self, height=10, width=60, font=('Courier', 12))  # Increased width
         self.notebook.grid(padx=10, pady=10, row=2, column=1, sticky='w')
         self.notebook.insert('1.0', actualnote)
 
         # Snippet Fields
         snippet_title_label = tk.Label(self, bg='#98FB98', text='Snippet Title:', font=('Courier', 12, 'bold'), fg='black')
         snippet_title_label.grid(padx=10, pady=10, row=3, column=0, sticky='e')
-        self.snippet_title = tk.Entry(self, width=60, font=('Courier', 12))
+        self.snippet_title = tk.Entry(self, width=40, font=('Courier', 12))  # Reduced width
         self.snippet_title.grid(padx=10, pady=10, row=3, column=1, sticky='w')
 
         snippet_code_label = tk.Label(self, bg='#98FB98', text='Snippet Code:', font=('Courier', 12, 'bold'), fg='black')
         snippet_code_label.grid(padx=10, pady=10, row=4, column=0, sticky='e')
-        self.snippet_code = tk.Text(self, height=10, width=40, font=('Courier', 12))
+        self.snippet_code = tk.Text(self, height=10, width=60, font=('Courier', 12))  # Increased width
         self.snippet_code.grid(padx=10, pady=10, row=4, column=1, sticky='w')
 
         # Submit Note Button
