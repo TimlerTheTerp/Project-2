@@ -8,25 +8,25 @@ import datetime
 class MainWindow(tk.Tk):
     def __init__(self):
         super().__init__()
-        
-        self.geometry("800x500")  
+
+        self.geometry("800x500")
         self.title('Notebook')
-        self.configure(bg='#98FB98')  
+        self.configure(bg='#98FB98')
         self.notebook = []
         self.notes = []
-        
+
         button_style = {'bg': 'purple', 'fg': 'white', 'font': ('Arial', 12, 'bold')}
-        
+
         # New Note Button
         self.new_button = tk.Button(self, text="New Note", command=self.new_note, **button_style)
-        self.new_button.pack(pady=30)  
-        # Open Notebook Button
-        self.open_button = tk.Button(self, text="Open Notebook", command=self.open_notebook, **button_style)
-        self.open_button.pack(pady=30)  
+        self.new_button.pack(pady=(100, 30))  # Increase the top padding to start lower
+        # Open Note Button
+        self.open_button = tk.Button(self, text="Open Note", command=self.open_notebook, **button_style)
+        self.open_button.pack(pady=30)
         # Quit Notebook Button
         self.quit_button = tk.Button(self, text="Quit Notebook", command=self.destroy, **button_style)
         self.quit_button.pack(pady=30)
-             
+
     def new_note(self):
         note_window = NoteForm(self, self.notebook, self.notes)
         return None
@@ -60,7 +60,7 @@ class MainWindow(tk.Tk):
             note_window.load_note()
 
 class NoteForm(tk.Toplevel):
-    
+
     def __init__(self, master, notebook, notes):
         super().__init__(master)
 
@@ -79,11 +79,11 @@ class NoteForm(tk.Toplevel):
         text_label = tk.Label(self, bg='#98FB98', text='Snippet:', font=('Courier', 12, 'bold'), fg='black')
         text_label.grid(padx=10, pady=10, row=2, column=0, sticky='e')
 
-        self.snippet_title = tk.Entry(self, width=40, font=('Courier', 12))  
+        self.snippet_title = tk.Entry(self, width=40, font=('Courier', 12))
         self.snippet_title.grid(padx=10, pady=10, row=1, column=1, sticky='w')
         self.snippet_title.insert(0, 'New snippet title')
 
-        self.snippet = tk.Text(self, height=10, width=60, font=('Courier', 12)) 
+        self.snippet = tk.Text(self, height=10, width=60, font=('Courier', 12))
         self.snippet.grid(padx=10, pady=10, row=2, column=1, sticky='w')
         self.snippet.insert('1.0', actualnote)
 
@@ -95,7 +95,7 @@ class NoteForm(tk.Toplevel):
         now = datetime.datetime.now()
         metadata_str = now.strftime("%Y-%m-%d %H:%M:%S %Z")
         return metadata_str
-    
+
     def save_file(self):
         now = datetime.datetime.now()
         metadata_str = now.strftime("%Y-%m-%d %H:%M:%S %Z")
@@ -104,17 +104,17 @@ class NoteForm(tk.Toplevel):
         meta = f'created {now}, {metadata_str}'
         note_dict = {'title':title, 'text':text, 'meta':meta}
         self.notes.append(note_dict)
-        
+
         filetext=f"{title}\n{text}\n{meta}"
 
         file = filedialog.asksaveasfile(initialdir="C:\\Users\\sdemp\\Documents\\GitHub\\Courses\\INST326\\test_files",
-                                            defaultextension=".txt", 
+                                            defaultextension=".txt",
                                             filetypes=[("text file", ".txt"),
                                             ("all files", ".*")])
         file.write(filetext)
         file.close()
-        
-        
+
+
     def submit(self):
         note_dict = {
             "title": self.snippet_title.get(),
@@ -139,10 +139,10 @@ class MakeNote():
     def __init__(self, note_dict):
         self.title = note_dict.get("title", "")
         self.text = note_dict.get("text", "")
-        self.metadata = note_dict.get("metadata", "") 
+        self.metadata = note_dict.get("metadata", "")
 
 if __name__ == '__main__':
-    
+
     main_window = MainWindow()
 
     main_window.mainloop()
