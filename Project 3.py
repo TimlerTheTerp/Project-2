@@ -1,7 +1,6 @@
 # imports
 import os
 import tkinter as tk
-from tkinter import ttk
 from tkinter import filedialog
 import datetime
 
@@ -45,13 +44,12 @@ class MainWindow(tk.Tk):
                         title = lines[i].strip()
                         text = lines[i+1].strip()
                         meta = lines[i+2].strip()
-                        snippet_title = lines[i+3].strip()
                         snippet_code = lines[i+4].strip()
                         
                         note_dict = {'title': title, 'text': text, 'meta': meta}
                         self.notes.append(note_dict)
                         
-                        snippet = Snippet(snippet_title, snippet_code)
+                        snippet = Snippet("", snippet_code)
                         self.snippets.append(snippet)
                         
                         i += 5
@@ -90,16 +88,11 @@ class NoteForm(tk.Toplevel):
         self.notebook.grid(padx=10, pady=10, row=2, column=1, sticky='w')
         self.notebook.insert('1.0', actualnote)
 
-        # Snippet Fields
-        snippet_title_label = tk.Label(self, bg='#98FB98', text='Snippet Title:', font=('Courier', 12, 'bold'), fg='black')
-        snippet_title_label.grid(padx=10, pady=10, row=3, column=0, sticky='e')
-        self.snippet_title = tk.Entry(self, width=40, font=('Courier', 12))  
-        self.snippet_title.grid(padx=10, pady=10, row=3, column=1, sticky='w')
-
+        # Snippet Example Code
         snippet_code_label = tk.Label(self, bg='#98FB98', text='Snippet Example Code:', font=('Courier', 12, 'bold'), fg='black')
-        snippet_code_label.grid(padx=10, pady=10, row=4, column=0, sticky='e')
+        snippet_code_label.grid(padx=10, pady=10, row=3, column=0, sticky='e')
         self.snippet_code = tk.Text(self, height=10, width=60, font=('Courier', 12))  
-        self.snippet_code.grid(padx=10, pady=10, row=4, column=1, sticky='w')
+        self.snippet_code.grid(padx=10, pady=10, row=3, column=1, sticky='w')
 
         # Close Note Button
         self.close_button = tk.Button(self, text="Close Note", command=self.close_note, font=('Courier', 12, 'bold'), bg='purple', fg='white')
@@ -123,10 +116,9 @@ class NoteForm(tk.Toplevel):
         note_dict = {'title':title, 'text':text, 'meta':meta}
         self.notes.append(note_dict)
         
-        snippet_title = self.snippet_title.get()
         snippet_code = self.snippet_code.get('1.0', 'end').strip('\n')
         
-        filetext=f"{title}\n{text}\n{meta}\n{snippet_title}\n{snippet_code}"
+        filetext=f"{title}\n{text}\n{meta}\n{snippet_code}"
 
         file = filedialog.asksaveasfile(defaultextension=".txt", 
                                          filetypes=[("text file", ".txt"), ("all files", ".*")])
@@ -152,8 +144,6 @@ class NoteForm(tk.Toplevel):
 
         if self.snippets:
             snippet = self.snippets[-1]
-            self.snippet_title.delete(0, tk.END)
-            self.snippet_title.insert(0, snippet.title)
             self.snippet_code.delete('1.0', tk.END)
             self.snippet_code.insert('1.0', snippet.code)
 
