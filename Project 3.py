@@ -15,20 +15,20 @@ class MainWindow(tk.Tk):
         self.notebook = []
         self.notes = []
 
-        button_style = {'bg': 'purple', 'fg': 'white', 'font': ('Arial', 12, 'bold')}
+        self.button_style = {'bg': 'purple', 'fg': 'white', 'font': ('Arial', 12, 'bold')}
 
         # New Note Button
-        self.new_button = tk.Button(self, text="New Note", command=self.new_note, **button_style)
+        self.new_button = tk.Button(self, text="New Note", command=self.new_note, **self.button_style)
         self.new_button.pack(pady=(100, 30))  # Increase the top padding to start lower
         # Open Note Button
-        self.open_button = tk.Button(self, text="Open Note", command=self.open_notebook, **button_style)
+        self.open_button = tk.Button(self, text="Open Note", command=self.open_notebook, **self.button_style)
         self.open_button.pack(pady=30)
         # Quit Notebook Button
-        self.quit_button = tk.Button(self, text="Quit Notebook", command=self.destroy, **button_style)
+        self.quit_button = tk.Button(self, text="Quit Notebook", command=self.destroy, **self.button_style)
         self.quit_button.pack(pady=30)
 
     def new_note(self):
-        note_window = NoteForm(self, self.notebook, self.notes)
+        note_window = NoteForm(self, self.notebook, self.notes, self.button_style)
         return None
 
     def open_notebook(self):
@@ -56,12 +56,12 @@ class MainWindow(tk.Tk):
                         # You can log an error message or skip the chunk
                         print(f"Skipping invalid note chunk: {chunk}")
 
-            note_window = NoteForm(self, self.notebook, self.notes)
+            note_window = NoteForm(self, self.notebook, self.notes, self.button_style)
             note_window.load_note()
 
 class NoteForm(tk.Toplevel):
 
-    def __init__(self, master, notebook, notes):
+    def __init__(self, master, notebook, notes, button_style):
         super().__init__(master)
 
         self.notes = notes
@@ -88,8 +88,8 @@ class NoteForm(tk.Toplevel):
         self.snippet.insert('1.0', actualnote)
 
         # Submit Note Button
-        self.submit_button = tk.Button(self, text="Submit Note", command=self.submit, font=('Courier', 12, 'bold'), bg='purple', fg='white')
-        self.submit_button.grid(row=6, column=1, pady=10)
+        self.submit_button = tk.Button(self, text="Submit Note", command=self.submit, **button_style)
+        self.submit_button.grid(row=6, column=1, pady=30)
 
     def metadata(self):
         now = datetime.datetime.now()
