@@ -1,5 +1,15 @@
 Potentially helpful things
 
+Links:
+https://www.w3schools.com/git/git_remote_getstarted.asp?remote=github
+https://www.py4e.com/html3/14-objects
+https://www.tutorialspoint.com/difference-between-grid-and-pack-geometry-managers-in-tkinter
+https://gist.github.com/albatrocity/1201187/5247457788890f0795a6e121275867e3551d0dc2Links to an external site.
+https://www.programiz.com/python-programming/directory
+https://www.turing.com/kb/introduction-to-python-class-attributes
+
+
+
 # Andy Nguyen
 def display_note_window(self, note_text):
     note_window = tk.Toplevel(self)
