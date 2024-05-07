@@ -1,10 +1,40 @@
 # imports
 import os
 import tkinter as tk
+from tkinter import Label
 from tkinter import ttk
 from tkinter import filedialog
 import datetime
 
+#Start Screen, 
+class StartScreen(tk.Tk):
+    def __init__(self):
+        super().__init__()
+
+        
+
+        self.geometry("800x500")
+        self.title('Notebook')
+        self.configure(bg='#98FB98')
+        self.notebook = []
+        self.notes = []
+
+        self.button_style = {'bg': 'purple', 'fg': 'white', 'font': ('Times New Roman', 12, 'bold')}
+
+        #Title
+        l = Label(self, text="Welcome to the Note Creating Machine!", font=("Arial", 16))
+        l.place(x = 220, y = 100)
+
+        #Start button
+        self.start_button = tk.Button(self, text="Click Here", command=self.MainSelection, **self.button_style)
+        self.start_button.place(x = 350, y = 250)  # Increase the top padding to start lower
+
+    #This gives the function that the user takes them to the real application
+    def MainSelection(self):
+            start = MainWindow()
+            return None
+
+        
 class MainWindow(tk.Tk):
     def __init__(self):
         super().__init__()
@@ -140,6 +170,12 @@ class MakeNote():
         self.title = note_dict.get("title", "")
         self.text = note_dict.get("text", "")
         self.metadata = note_dict.get("metadata", "")
+
+
+
+    main_window = StartScreen()
+
+    main_window.mainloop()
 
 if __name__ == '__main__':
 
