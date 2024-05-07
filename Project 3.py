@@ -16,8 +16,6 @@ class StartScreen(tk.Tk):
         self.geometry("800x500")
         self.title('Notebook')
         self.configure(bg='#98FB98')
-        self.notebook = []
-        self.notes = []
 
         self.button_style = {'bg': 'purple', 'fg': 'white', 'font': ('Times New Roman', 12, 'bold')}
 
@@ -26,15 +24,22 @@ class StartScreen(tk.Tk):
         l.place(x = 220, y = 100)
 
         #Start button
-        self.start_button = tk.Button(self, text="Click Here", command=self.MainSelection, **self.button_style)
-        self.start_button.place(x = 350, y = 250)  # Increase the top padding to start lower
+        self.start_button = tk.Button(self, text="Begin", command=self.MainSelection, **self.button_style)
+        self.start_button.place(x = 150, y = 250)  # Increase the top padding to start lower
+
+        #Quit button
+        self.quit_button = tk.Button(self, text="Quit", command=self.Quit, **self.button_style)
+        self.quit_button.place(x = 650, y = 250)  # Increase the top padding to start lower
 
     #This gives the function that the user takes them to the real application
     def MainSelection(self):
             start = MainWindow()
             return None
+    
+    def Quit(self):
+            self.destroy()
 
-        
+#Real Window       
 class MainWindow(tk.Tk):
     def __init__(self):
         super().__init__()
@@ -89,6 +94,7 @@ class MainWindow(tk.Tk):
             note_window = NoteForm(self, self.notebook, self.notes, self.button_style)
             note_window.load_note()
 
+#Note creator
 class NoteForm(tk.Toplevel):
 
     def __init__(self, master, notebook, notes, button_style):
