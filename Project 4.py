@@ -136,6 +136,11 @@ class MainWindow(tk.Tk):
         self.quit_button.bind("<Enter>", lambda event: self.show_tooltip("Quit the notebook application"))
         self.quit_button.bind("<Leave>", lambda event: self.hide_tooltip())
 
+         #Alexander, Also added name
+        #Choosing your name
+        l = Label(self, text="Select Name", font=("Arial", 16), fg='black', bg='#efd9fd')
+        l.place(x= 40 , y= 400)
+
     def new_note(self):
         note_window = NoteForm(self, self.notebook, self.notes, self.button_style)
         return None
