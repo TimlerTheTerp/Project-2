@@ -54,8 +54,8 @@ class StartScreen(tk.Tk):
 
 #Tyler Vu, Helps chooses fileformat, this thing is important because it allows the user to choose file format
 class FileFormatDialog(tk.Toplevel):
-    def __init__(self, parent):
-        super().__init__(parent)
+    def __init__(self, filly):
+        super().__init__(filly)
 
         self.title("Select Preffered File Format")
         self.geometry("300x150")
