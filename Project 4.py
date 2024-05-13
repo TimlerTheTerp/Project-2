@@ -7,14 +7,20 @@ from tkinter import ttk
 from tkinter import filedialog
 import datetime
 from xml.etree import ElementTree as ET
+import os
+
+#Github Link
+#https://github.com/TimlerTheTerp/Project-2
 
 #Tyler Vu, I was in charge of making the start screen
 #1 I made a start screen which prompts the user to welcome the user to the screen. Makes the program better by greeting the user
 #Thara Le, I was in charge of making design/aesthetic changes.
 #2 I edited the colors, geometry, added borders, and moved around buttons to look more appealing to the user.
-#salih awel, I was in charge of improving the overall user interface and experience.
-#Added resizable windows,implemented vertical scrollbars in text area for large notes,incorporated keyboard shortcuts (Ctrl+N, Ctrl+Q),
+#Salih Awel, I was in charge of improving the overall user interface and experience.
+#3 Added resizable windows, implemented vertical scrollbars in text area for large notes, incorporated keyboard shortcuts (Ctrl+N, Ctrl+Q),
 #included tooltip text on buttons for guidance. Changed font to Arial for readability.
+#Alexander Guidinetti, I was in charge of condensing/revising.
+#4 I fixed some bugs with the opening/quitting, condensed/revised some parts, and added a live time on all the windows.
 
 class StartScreen(tk.Tk):
     def __init__(self):
@@ -311,3 +317,80 @@ class MakeNote():
 
 main_window = StartScreen()
 main_window.mainloop()
+
+#10 notes:
+
+#Title
+#Encapsulation
+#Text
+#Encapsulation is another key pillar of OOP. In involves containing the methods involved with data and the data itself within a singular unit. This is what classes are. Classes contain attributes and methods which are then applied to whatever objects are created using the classes. These objects have clear properties and uses. 
+
+#Title
+#What is Object-Oriented Programming in Python?
+#Text
+#OOPs in python are a programming paradigm that uses objects and classes in programming. It aims to implement real-world entities like inheritance, polymorphisms, encapsulation, etc. in the programming.
+
+#Title 
+#Calling Parent class method
+#Text
+#Method overriding is an ability of any object-oriented programming language that allows a subclass or child class to provide a specific implementation of a method that is already provided by one of its super-classes or parent classes. Parent class methods can also be called within the overridden methods. This can generally be achieved by using Parent’s class methods can be called by using the Parent classname.method inside the overridden method.
+    
+#Title
+#How to use datetime module
+#Snippet Code
+#import datetime as dt
+## renames the datetime module to: dt
+#now = dt.datetime.now()
+#year = now.year
+#month = now.month
+#day_of_week = now.weekday()
+#print(day_of_week)
+#date_of_birth = dt.datetime(year=2003, month=10, day=24, hour=4)
+#print(date_of_birth)
+
+#Title
+#Back To The Beginning: OOP
+#Text
+#In OOP, there are 3 main parts to it. Encapsulation which is collecting data to put it together, Polymorphism which is when objects are able to do different things, and Inheritance when objects can have same features.
+
+#Title
+#Inheritance in OOP
+#Text
+#Inheritance in OOP is like taking material from the older category and putting it into the new one. In other words, your reusing a code and just adding some new things to it. This is beneficial in OOP because it keeps everything organized.
+
+#Title
+#Function to check if a list is empty
+#Text
+#This function checks if a list is empty and returns a Boolean value (True or False).
+#Snippet Code
+#def is_list_empty(lst):
+#    """Check if the given list is empty and return a Boolean result."""
+#    return len(lst) == 0
+## Example Usage
+#my_list = []
+#print(is_list_empty(my_list))  # Output: True
+
+#Title 
+#Exploring Nested Loops for Multi-dimensional Data Processing
+#Text
+#Nested loops are a powerful construct in Python that allow you to iterate over multi-dimensional data structures such as lists of lists or matrices. They enable you to traverse each element in a nested structure and perform operations efficiently. Nested loops are commonly used in tasks like matrix manipulation, image processing, and searching through multi-dimensional data.
+
+#Title
+#Data Cleaning with Python
+#Snippet Code
+#import pandas as pd
+#data = pd.read_csv('your_dataset.csv')
+## Dropping duplicate rows
+#data = data.drop_duplicates()
+## Handling missing values by filling them with mean
+#data.fillna(data.mean(), inplace=True)
+##Removing outliers 
+#from scipy import stats
+#data = data[(np.abs(stats.zscore(data)) < 3).all(axis=1)]
+##Saving cleaned data into a new CSV file
+#data.to_csv('cleaned_data.csv', index=False)
+
+#Title
+#RegEx
+#Text
+#Regular Expressions are very useful for data analysis using python. To import you would type "import re", this basically allows you easy search for terms. It could be used for the notebook application to search which specific note in a huge list has the information sequence that you need.
