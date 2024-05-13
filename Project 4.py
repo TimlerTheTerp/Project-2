@@ -1,14 +1,15 @@
 # imports
-import os
 import tkinter as tk
+import json
+import csv
 from tkinter import Label
+from tkinter import ttk
 from tkinter import filedialog
 import datetime
+from xml.etree import ElementTree as ET
 
-#Tyler Vu, I was in charge of making the start screen.
-#We made a start screen which prompts the user to welcome the user to the screen.
-#Thara Le, I was in charge of making design/aesthetic changes.
-#I edited the colors, geometry, added borders, and moved around buttons to look more appealing to the user.
+#Tyler Vu, I was in charge of making the start screen
+#1 I made a start screen which prompts the user to welcome the user to the screen. Makes the program better by greeting the user
 class StartScreen(tk.Tk):
     def __init__(self):
         super().__init__()
@@ -24,7 +25,7 @@ class StartScreen(tk.Tk):
         f.place(x=220, y=100)
 
         # Title
-        l = Label(f, text="  Welcome to the Note Creating Machine!  ", font=("Arial", 16), fg='white')
+        l = Label(f, text="  Welcome to the Note Creating Machine!  ", font=("Arial", 16), fg='black')
         l.pack()
 
         # Date and Time Label
@@ -39,12 +40,44 @@ class StartScreen(tk.Tk):
         self.quit_button = tk.Button(self, text="Quit", command=self.Quit, **self.button_style)
         self.quit_button.place(x=530, y=250)
 
+    # 2 I made the opening where the user gets to open the maker move, the user clicks and opens the program. This improves the program because it leads the user to the main screen
     def MainSelection(self):
         self.destroy()  # Close the StartScreen window
         start = MainWindow()  # Create an instance of MainWindow
         start.mainloop()  # Run the MainWindow loop
 
+    # 3 I made a quit button as well because what if the user decides to exit the program. If the user accidentally clicks on this program, he or she will have the choice to exit out
     def Quit(self):
+        self.destroy()
+
+#Tyler Vu, Helps chooses fileformat, this thing is important because it allows the user to choose file format
+class FileFormatDialog(tk.Toplevel):
+    def __init__(self, parent):
+        super().__init__(parent)
+
+        self.title("Select Preffered File Format")
+        self.geometry("300x150")
+        self.grab_set()
+
+        label = tk.Label(self, text="Select the file format:")
+        label.pack(pady=10)
+
+        self.file_format = tk.StringVar()
+        self.file_format.set("txt")  # Set default selection
+
+        formats = [("Text File (.txt)", "txt"),
+                   ("JSON (.json)", "json"),
+                   ("CSV (.csv)", "csv"),
+                   ("XML (.xml)", "xml")]
+
+        for text, value in formats:
+            radio = tk.Radiobutton(self, text=text, variable=self.file_format, value=value)
+            radio.pack(anchor="w")
+
+        button = tk.Button(self, text="Save", command=self.save_format)
+        button.place(x = 175, y = 100)
+
+    def save_format(self):
         self.destroy()
 
 
@@ -205,22 +238,51 @@ class NoteForm(tk.Toplevel):
         return now.strftime("%Y-%m-%d %H:%M:%S %Z")
 
     def save_file(self):
+        # Create the file format dialog
+        dialog = FileFormatDialog(self)
+        self.wait_window(dialog)  # Wait until the dialog is closed
+
+        # Get the selected file format
+        file_format = dialog.file_format.get()
+
         now = datetime.datetime.now()
         title = self.snippet_title.get()
         text = self.snippet.get('1.0', 'end').strip('\n')
         meta = f'created {now}'
         note_dict = {'title': title, 'text': text, 'meta': meta}
+
+        # Add the note to the notes list
         self.notes.append(note_dict)
 
-        filetext = f"{title}\n{text}\n{meta}"
+        # Prepare the content to be saved based on the selected format
+        if file_format == 'txt':
+            file_content = f"{title}\n{text}\n{meta}"
+            file_extension = ".txt"
+        elif file_format == 'json':
+            file_content = json.dumps(note_dict)
+            file_extension = ".json"
+        elif file_format == 'csv':
+            file_content = f"{title},{text},{meta}"
+            file_extension = ".csv"
+        elif file_format == 'xml':
+            note_elem = ET.Element('note')
+            title_elem = ET.SubElement(note_elem, 'title')
+            title_elem.text = title
+            text_elem = ET.SubElement(note_elem, 'text')
+            text_elem.text = text
+            meta_elem = ET.SubElement(note_elem, 'meta')
+            meta_elem.text = meta
+            file_content = ET.tostring(note_elem).decode()
+            file_extension = ".xml"
+        else:
+            raise ValueError("Invalid file format specified")
 
+        # Ask user for the file path to save
         file = filedialog.asksaveasfile(initialdir="C:\\Users\\sdemp\\Documents\\GitHub\\Courses\\INST326\\test_files",
-                                         defaultextension=".txt",
-                                         filetypes=[("text file", ".txt"),
-                                                    ("all files", ".*")])
-        if file:
-            file.write(filetext)
-            file.close()
+                                        defaultextension=file_extension,
+                                        filetypes=[(f"{file_format.upper()} file", f"*{file_extension}"),
+                                                    ("All files", "*.*")])
+
 
     def load_note(self):
         if self.notes:
