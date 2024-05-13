@@ -5,6 +5,10 @@ from tkinter import Label
 from tkinter import filedialog
 import datetime
 
+#Tyler Vu, I was in charge of making the start screen.
+#We made a start screen which prompts the user to welcome the user to the screen.
+#Thara Le, I was in charge of making design/aesthetic changes.
+#I edited the colors, geometry, added borders, and moved around buttons to look more appealing to the user.
 class StartScreen(tk.Tk):
     def __init__(self):
         super().__init__()
