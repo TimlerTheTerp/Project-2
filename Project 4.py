@@ -6,6 +6,8 @@ from tkinter import ttk
 from tkinter import filedialog
 import datetime
 
+#Tyler Vu, I was in charge of making the start screen
+#We made a start screen which prompts the user to welcome the user to the screen
 class StartScreen(tk.Tk):
     def __init__(self):
         super().__init__()
@@ -36,11 +38,13 @@ class StartScreen(tk.Tk):
         self.quit_button = tk.Button(self, text="Quit", command=self.Quit, **self.button_style)
         self.quit_button.place(x=530, y=250)
 
+    #We made the opening where the user gets to open the maker move
     def MainSelection(self):
         self.destroy()  # Close the StartScreen window
         start = MainWindow()  # Create an instance of MainWindow
         start.mainloop()  # Run the MainWindow loop
-    
+
+    #Made a quit button as well
     def Quit(self):
         self.destroy()
 
@@ -127,27 +131,28 @@ class NoteForm(tk.Toplevel):
         title_label = tk.Label(self, bg='#efd9fd', text='Snippet Title:', font=('Courier', 12, 'bold'), fg='black')
         title_label.grid(padx=10, pady=10, row=1, column=0, sticky='e')
 
-        # Snippet
+        # Snippet, we added a scrollbar
         text_label = tk.Label(self, bg='#efd9fd', text='Snippet:', font=('Courier', 12, 'bold'), fg='black')
         text_label.grid(padx=10, pady=10, row=2, column=0, sticky='e')
 
         self.snippet_title = tk.Entry(self, width=40, font=('Courier', 12))
         self.snippet_title.grid(padx=10, pady=10, row=1, column=1, sticky='w')
         self.snippet_title.insert(0, 'Untitled')
+        
+        snippet_frame = tk.Frame(self, bg='#efd9fd')  # Frame to contain the text widget and scrollbar
+        snippet_frame.grid(row=2, column=1, sticky='w')
 
-        self.snippet = tk.Text(self, height=10, width=60, font=('Courier', 12))
-        self.snippet.grid(padx=10, pady=10, row=2, column=1, sticky='w')
+        self.snippet = tk.Text(snippet_frame, height=10, width=60, font=('Courier', 12))
+        self.snippet.grid(row=0, column=0, sticky='w')
+
+        scrollbar = tk.Scrollbar(snippet_frame, orient='vertical', command=self.snippet.yview)
+        scrollbar.grid(row=0, column=1, sticky='ns')
+
+        self.snippet.config(yscrollcommand=scrollbar.set)
 
         buttons_frame = tk.Frame(self, bg='#efd9fd')
         buttons_frame.grid(row=6, column=1)
 
-        # Submit Note Button
-        self.submit_button = tk.Button(buttons_frame, text="Submit Note", command=self.submit, **button_style)
-        self.submit_button.grid(row=0, column=0, padx=50)
-
-        # Quit Note Button
-        self.quit_button = tk.Button(buttons_frame, text="Quit Note", command=self.quit_note, **button_style)
-        self.quit_button.grid(row=0, column=1, padx=50)
 
     def submit(self):
         note_dict = {
