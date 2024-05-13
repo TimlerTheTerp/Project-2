@@ -10,6 +10,8 @@ from xml.etree import ElementTree as ET
 
 #Tyler Vu, I was in charge of making the start screen
 #1 I made a start screen which prompts the user to welcome the user to the screen. Makes the program better by greeting the user
+#Thara Le, I was in charge of making design/aesthetic changes.
+#2 I edited the colors, geometry, added borders, and moved around buttons to look more appealing to the user.
 class StartScreen(tk.Tk):
     def __init__(self):
         super().__init__()
