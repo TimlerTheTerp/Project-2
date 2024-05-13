@@ -2,14 +2,9 @@
 import os
 import tkinter as tk
 from tkinter import Label
-from tkinter import ttk
 from tkinter import filedialog
 import datetime
 
-#Tyler Vu, I was in charge of making the start screen.
-#We made a start screen which prompts the user to welcome the user to the screen.
-#Thara Le, I was in charge of making design/aesthetic changes.
-#I edited the colors, geometry, added borders, and moved around buttons to look more appealing to the user.
 class StartScreen(tk.Tk):
     def __init__(self):
         super().__init__()
@@ -18,35 +13,33 @@ class StartScreen(tk.Tk):
         self.title('Notebook')
         self.configure(bg='#efd9fd')
 
-        self.button_style = {'bg': 'purple', 'fg': 'white', 'font': ('Georgia', 12, 'bold')}
+        self.button_style = {'bg': 'purple', 'fg': 'white', 'font': ('Arial', 12, 'bold')}
 
-        #Frame for title
+        # Frame for title
         f = tk.Frame(self, bg='purple', bd=5)
         f.place(x=220, y=100)
 
-        #Title
-        l = Label(f, text="  Welcome to the Note Creating Machine!  ", font=("Georgia", 16))
+        # Title
+        l = Label(f, text="  Welcome to the Note Creating Machine!  ", font=("Arial", 16), fg='white')
         l.pack()
 
-        #Date and Time Label
-        self.date_time_label = Label(self, text="", font=("Georgia", 12), bg='#efd9fd')
+        # Date and Time Label
+        self.date_time_label = Label(self, text="", font=("Arial", 12), bg='#efd9fd')
         self.date_time_label.place(x=10, y=10)
 
-        #Start button
+        # Start button
         self.start_button = tk.Button(self, text="Begin", command=self.MainSelection, **self.button_style)
         self.start_button.place(x=250, y=250)
 
-        #Quit button
+        # Quit button
         self.quit_button = tk.Button(self, text="Quit", command=self.Quit, **self.button_style)
         self.quit_button.place(x=530, y=250)
 
-    #We made the opening where the user gets to open the maker move
     def MainSelection(self):
         self.destroy()  # Close the StartScreen window
         start = MainWindow()  # Create an instance of MainWindow
         start.mainloop()  # Run the MainWindow loop
 
-    #Made a quit button as well
     def Quit(self):
         self.destroy()
 
@@ -61,24 +54,38 @@ class MainWindow(tk.Tk):
         self.notebook = []
         self.notes = []
 
-        self.button_style = {'bg': 'purple', 'fg': 'white', 'font': ('Georgia', 12, 'bold')}
+        self.button_style = {'bg': 'purple', 'fg': 'white', 'font': ('Arial', 12, 'bold')}
+
+        self.minsize(800, 500)
+        self.maxsize(1200, 800)
+
+        self.bind("<Control-n>", lambda event: self.new_note())
+        self.bind("<Control-q>", lambda event: self.quit_app())
+
+        self.tooltip_window = None
 
         # Date and Time Label
-        self.date_time_label = Label(self, text="", font=("Georgia", 12), bg='#efd9fd')
+        self.date_time_label = Label(self, text="", font=("Arial", 12), bg='#efd9fd')
         self.date_time_label.place(x=10, y=10)
         self.update_date_time_label()  # Update the date and time label
 
         # New Note Button
         self.new_button = tk.Button(self, text="New Note", command=self.new_note, **self.button_style)
         self.new_button.pack(pady=(100, 30))
+        self.new_button.bind("<Enter>", lambda event: self.show_tooltip("Create a new note"))
+        self.new_button.bind("<Leave>", lambda event: self.hide_tooltip())
 
         # Open Note Button
         self.open_button = tk.Button(self, text="Open Note", command=self.open_notebook, **self.button_style)
         self.open_button.pack(pady=30)
+        self.open_button.bind("<Enter>", lambda event: self.show_tooltip("Open an existing note"))
+        self.open_button.bind("<Leave>", lambda event: self.hide_tooltip())
 
         # Quit Notebook Button
         self.quit_button = tk.Button(self, text="Quit Notebook", command=self.quit_app, **self.button_style)
         self.quit_button.pack(pady=30)
+        self.quit_button.bind("<Enter>", lambda event: self.show_tooltip("Quit the notebook application"))
+        self.quit_button.bind("<Leave>", lambda event: self.hide_tooltip())
 
     def new_note(self):
         note_window = NoteForm(self, self.notebook, self.notes, self.button_style)
@@ -91,15 +98,15 @@ class MainWindow(tk.Tk):
         if filepath:
             with open(filepath, 'r') as file:
                 file_contents = file.read()
-                note_chunks = file_contents.split('\n\n')  
+                note_chunks = file_contents.split('\n\n')
 
                 self.notes = []
 
                 for chunk in note_chunks:
-                    lines = chunk.strip().split('\n')  
+                    lines = chunk.strip().split('\n')
                     if len(lines) >= 3:
                         title = lines[0]
-                        text = '\n'.join(lines[1:-1])  
+                        text = '\n'.join(lines[1:-1])
                         meta = lines[-1]
 
                         note_dict = {'title': title, 'text': text, 'meta': meta}
@@ -119,6 +126,20 @@ class MainWindow(tk.Tk):
         self.date_time_label.config(text=f"Current Date and Time: {formatted_date_time}")
         self.date_time_label.after(1000, self.update_date_time_label)
 
+    def show_tooltip(self, text):
+        if self.tooltip_window:
+            self.tooltip_window.destroy()
+        self.tooltip_window = tk.Toplevel(self)
+        self.tooltip_window.overrideredirect(True)
+        self.tooltip_window.geometry("+%d+%d" % (self.winfo_pointerx() + 20, self.winfo_pointery()))
+        label = tk.Label(self.tooltip_window, text=text, bg="black", fg="yellow", padx=5, pady=2)
+        label.pack()
+
+    def hide_tooltip(self):
+        if self.tooltip_window:
+            self.tooltip_window.destroy()
+            self.tooltip_window = None
+
 
 class NoteForm(tk.Toplevel):
     def __init__(self, master, notebook, notes, button_style):
@@ -129,32 +150,39 @@ class NoteForm(tk.Toplevel):
         self.geometry("800x400")
         self.configure(bg='#efd9fd')
 
+        self.minsize(800, 400)
+        self.maxsize(1200, 800)
+
         # Snippet Title
-        title_label = tk.Label(self, bg='#efd9fd', text='Snippet Title:', font=('Courier', 12, 'bold'), fg='black')
+        title_label = tk.Label(self, bg='#efd9fd', text='Note Title:', font=('Arial', 12, 'bold'), fg='black')
         title_label.grid(padx=10, pady=10, row=1, column=0, sticky='e')
 
-        # Snippet, we added a scrollbar
-        text_label = tk.Label(self, bg='#efd9fd', text='Snippet:', font=('Courier', 12, 'bold'), fg='black')
+        # Snippet
+        text_label = tk.Label(self, bg='#efd9fd', text='Note Text:', font=('Arial', 12, 'bold'), fg='black')
         text_label.grid(padx=10, pady=10, row=2, column=0, sticky='e')
 
-        self.snippet_title = tk.Entry(self, width=40, font=('Courier', 12))
+        self.snippet_title = tk.Entry(self, width=40, font=('Arial', 12))
         self.snippet_title.grid(padx=10, pady=10, row=1, column=1, sticky='w')
         self.snippet_title.insert(0, 'Untitled')
-        
-        snippet_frame = tk.Frame(self, bg='#efd9fd')  # Frame to contain the text widget and scrollbar
-        snippet_frame.grid(row=2, column=1, sticky='w')
 
-        self.snippet = tk.Text(snippet_frame, height=10, width=60, font=('Courier', 12))
-        self.snippet.grid(row=0, column=0, sticky='w')
+        text_scrollbar = tk.Scrollbar(self)
+        text_scrollbar.grid(row=2, column=2, sticky="ns")
 
-        scrollbar = tk.Scrollbar(snippet_frame, orient='vertical', command=self.snippet.yview)
-        scrollbar.grid(row=0, column=1, sticky='ns')
+        self.snippet = tk.Text(self, height=10, width=60, font=('Arial', 12), yscrollcommand=text_scrollbar.set)
+        self.snippet.grid(padx=10, pady=10, row=2, column=1, sticky="nsew")
 
-        self.snippet.config(yscrollcommand=scrollbar.set)
+        text_scrollbar.config(command=self.snippet.yview)
 
         buttons_frame = tk.Frame(self, bg='#efd9fd')
         buttons_frame.grid(row=6, column=1)
 
+        # Submit Note Button
+        self.submit_button = tk.Button(buttons_frame, text="Submit Note", command=self.submit, **button_style)
+        self.submit_button.grid(row=0, column=0, padx=50)
+
+        # Quit Note Button
+        self.quit_button = tk.Button(buttons_frame, text="Quit Note", command=self.quit_note, **button_style)
+        self.quit_button.grid(row=0, column=1, padx=50)
 
     def submit(self):
         note_dict = {
